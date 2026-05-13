@@ -339,8 +339,8 @@
   /* ── Print ── */
   @media print {
     body { background: #fff; }
-    .page-header, .steps, #intake-view, .btn-row, .no-print { display: none !important; }
-    #agreement-view { display: block !important; }
+    .page-header, .steps, #intake-view, #review-view, .btn-row, .no-print { display: none !important; }
+    #confirmation-view { display: block !important; }
     .agreement-doc { border: none; padding: 0; box-shadow: none; }
     .main { padding: 0; max-width: 100%; }
   }
@@ -378,13 +378,8 @@
 
   <div class="steps">
     <div class="step-tab active" id="tab-1">1. Intake</div>
-    <div class="step-tab" id="tab-2">2. Review package</div>
-    <div class="step-tab" id="tab-3">3. Agreement</div>
-  </div>
-
-  <div class="confirm-banner" id="confirm-banner">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#3b6d11" stroke-width="1.5"/><path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="#3b6d11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Intake submitted successfully. Your agreement is ready to review and sign below.
+    <div class="step-tab" id="tab-2">2. Review &amp; approve</div>
+    <div class="step-tab" id="tab-3">3. Submitted</div>
   </div>
 
   <!-- ══ STEP 1: INTAKE FORM ══ -->
@@ -412,9 +407,14 @@
         <label>What are you applying for? <span class="req">*</span></label>
         <div class="pills" id="pills-cert">
           <label class="pill" onclick="selectPill(this,'cert','new-sp')"><input type="radio" name="cert" value="new-sp"> New single-pilot Part 135 certificate</label>
+          <label class="pill" onclick="selectPill(this,'cert','basic-135')"><input type="radio" name="cert" value="basic-135"> New Basic Part 135 (multi-pilot / multi-aircraft)</label>
           <label class="pill" onclick="selectPill(this,'cert','opspec')"><input type="radio" name="cert" value="opspec"> OpSpec addition / amendment</label>
           <label class="pill" onclick="selectPill(this,'cert','full')"><input type="radio" name="cert" value="full"> Full consulting engagement</label>
           <label class="pill" onclick="selectPill(this,'cert','other')"><input type="radio" name="cert" value="other"> Other / unsure</label>
+        </div>
+        <div class="flag flag-info" id="flag-basic135">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#0c447c" stroke-width="1.5"/><path d="M8 7v4M8 5v.5" stroke="#0c447c" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span><strong>Worth considering:</strong> A single-pilot certificate is significantly faster and simpler to obtain than a Basic Part 135 from scratch — fewer required management positions, reduced documentation burden, and a much smoother FSDO process. Many operators start there and upgrade to Basic Part 135 shortly after, which is a much lighter lift than pursuing Basic 135 as a first certificate. If time-to-certificate matters, this is worth a conversation before you commit to a path.</span>
         </div>
         <div class="flag flag-warn show" id="flag-other" style="display:none">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -425,37 +425,65 @@
 
     <div class="card">
       <div class="card-title">Aircraft &amp; operations</div>
-      <div class="two-col">
-        <div class="field"><label>Aircraft make &amp; model <span class="req">*</span></label><input type="text" id="f-aircraft" placeholder="e.g. Cessna 208B"></div>
-        <div class="field"><label>Aircraft category <span class="req">*</span></label>
-          <select id="f-cat" onchange="evalForm()">
-            <option value="">Select…</option>
-            <option>Single-engine piston (ASEL)</option>
-            <option>Single-engine turboprop (ASEL)</option>
-            <option>Multi-engine piston (AMEL)</option>
-            <option>Multi-engine turboprop (AMEL)</option>
-            <option>Helicopter (rotorcraft)</option>
-            <option>Other</option>
-          </select>
+
+      <div class="field">
+        <label>Number of aircraft in the operation <span class="req">*</span></label>
+        <div class="pills" id="pills-numac">
+          <label class="pill" onclick="selectPill(this,'numac','1')"><input type="radio" name="numac" value="1"> 1 aircraft</label>
+          <label class="pill" onclick="selectPill(this,'numac','2')"><input type="radio" name="numac" value="2"> 2 aircraft</label>
+          <label class="pill" onclick="selectPill(this,'numac','3')"><input type="radio" name="numac" value="3"> 3 aircraft</label>
+          <label class="pill" onclick="selectPill(this,'numac','4plus')"><input type="radio" name="numac" value="4plus"> 4 or more</label>
+        </div>
+        <div class="flag flag-info" id="flag-multiaircraft">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#0c447c" stroke-width="1.5"/><path d="M8 7v4M8 5v.5" stroke="#0c447c" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Multiple aircraft on a single-pilot certificate is permitted — each aircraft requires its own authorization in your OpSpecs. Please provide details for each aircraft below.
         </div>
       </div>
-      <div class="field">
-        <label>Intended operations <span class="req">*</span></label>
-        <div class="pills" id="pills-ops">
-          <label class="pill" onclick="togglePill(this,'ops','vfr-day')"><input type="checkbox" name="ops" value="vfr-day"> VFR day</label>
-          <label class="pill" onclick="togglePill(this,'ops','vfr-night')"><input type="checkbox" name="ops" value="vfr-night"> VFR night</label>
-          <label class="pill" onclick="togglePill(this,'ops','ifr')"><input type="checkbox" name="ops" value="ifr"> IFR</label>
-          <label class="pill" onclick="togglePill(this,'ops','haa')"><input type="checkbox" name="ops" value="haa"> Helicopter air ambulance (HAA)</label>
-          <label class="pill" onclick="togglePill(this,'ops','international')"><input type="checkbox" name="ops" value="international"> International</label>
-          <label class="pill" onclick="togglePill(this,'ops','overwater')"><input type="checkbox" name="ops" value="overwater"> Extended overwater</label>
+
+      <!-- Aircraft 1 — always shown -->
+      <div style="border-top:1px solid var(--gray-100);margin-top:1rem;padding-top:1rem">
+        <div style="font-family:-apple-system,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--gray-400);margin-bottom:10px">Aircraft 1</div>
+        <div class="two-col">
+          <div class="field"><label>Make &amp; model <span class="req">*</span></label><input type="text" id="f-aircraft" placeholder="e.g. Cessna 206"></div>
+          <div class="field"><label>N-Number (if known)</label><input type="text" id="f-nnum-1" placeholder="e.g. N12345"></div>
         </div>
-        <div class="flag flag-warn" id="flag-haa">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
-          HAA / Subpart L requires the OpSpec A021 package — pricing $6,900. Includes Risk Analysis Worksheet, GOM revisions, and training program.
+        <div class="two-col">
+          <div class="field"><label>Category <span class="req">*</span></label>
+            <select id="f-cat" onchange="evalForm()">
+              <option value="">Select…</option>
+              <option>Single-engine piston (ASEL)</option>
+              <option>Single-engine turboprop (ASEL)</option>
+              <option>Multi-engine piston (AMEL)</option>
+              <option>Multi-engine turboprop (AMEL)</option>
+              <option>Helicopter (rotorcraft)</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field"><label>Passenger seats</label><input type="number" id="f-seats-1" placeholder="e.g. 5" min="1" max="30" style="width:100%"></div>
         </div>
-        <div class="flag flag-warn" id="flag-multi">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Multi-engine or helicopter operations may require expanded scope. We'll confirm before delivering documents.
+      </div>
+
+      <!-- Aircraft 2+ — shown when numac >= 2 -->
+      <div id="extra-aircraft" style="display:none"></div>
+
+      <div style="border-top:1px solid var(--gray-100);margin-top:1.25rem;padding-top:1.25rem">
+        <div class="field">
+          <label>Intended operations <span class="req">*</span></label>
+          <div class="pills" id="pills-ops">
+            <label class="pill" onclick="togglePill(this,'ops','vfr-day')"><input type="checkbox" name="ops" value="vfr-day"> VFR day</label>
+            <label class="pill" onclick="togglePill(this,'ops','vfr-night')"><input type="checkbox" name="ops" value="vfr-night"> VFR night</label>
+            <label class="pill" onclick="togglePill(this,'ops','ifr')"><input type="checkbox" name="ops" value="ifr"> IFR</label>
+            <label class="pill" onclick="togglePill(this,'ops','haa')"><input type="checkbox" name="ops" value="haa"> Helicopter air ambulance (HAA)</label>
+            <label class="pill" onclick="togglePill(this,'ops','international')"><input type="checkbox" name="ops" value="international"> International</label>
+          </div>
+          <div class="flag flag-warn" id="flag-haa">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+            HAA / Subpart L requires the OpSpec A021 package — $12,250. Includes Risk Analysis Worksheet, GOM revisions, and training program.
+          </div>
+          <div class="flag flag-warn" id="flag-multi">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Multi-engine or helicopter operations may require expanded scope. We'll confirm before delivering documents.
+          </div>
         </div>
       </div>
     </div>
@@ -539,6 +567,20 @@
     </div>
 
     <div class="card">
+      <div class="card-title">Operations Specifications (OpSpecs) requested</div>
+      <p style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--gray-600);margin-bottom:1.25rem;line-height:1.6">
+        Select all OpSpecs being requested. This list covers <strong>Part A (General, Management &amp; Authorization)</strong> OpSpecs from FAA Order 8900.1 Vol. 3, Ch. 18, Sec. 3. Items highlighted in blue are standard for most Part 135 operators. Items marked ★ require additional documentation or scope and will be flagged for review.
+      </p>
+
+      <div id="opspec-groups"></div>
+
+      <div class="flag flag-warn" id="flag-opspec-complex" style="margin-top:1rem">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+        One or more selected OpSpecs require additional scope beyond the base package. We will review and confirm pricing before beginning work.
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-title">Operation description &amp; additional notes</div>
       <div class="field">
         <label>Describe your intended operation in plain language <span class="req">*</span></label>
@@ -570,29 +612,98 @@
     <p style="font-family:-apple-system,sans-serif;font-size:12px;color:var(--gray-400);margin-top:1rem;line-height:1.6">
       By submitting this form, you acknowledge that Arrow Consulting LLC provides advisory and documentation services only.
       All FAA certification decisions are made solely by the FAA. Submitting this intake does not constitute a binding agreement —
-      the consulting agreement on the next step requires your signature.
+      a formal consulting agreement will be sent for your signature before any payment is requested.
     </p>
 
   </div><!-- /intake-view -->
 
-  <!-- ══ STEP 3: AGREEMENT ══ -->
-  <div id="agreement-view">
+  <!-- ══ STEP 2: REVIEW & APPROVE ══ -->
+  <div id="review-view" style="display:none">
 
-    <div class="btn-row no-print" style="margin-bottom:1.25rem">
-      <button class="btn btn-secondary" onclick="goBack()">&#8592; Edit intake</button>
-      <button class="btn btn-primary" onclick="window.print()">Print / save PDF &rarr;</button>
+    <div style="background:var(--blue-light);border:1px solid #85b7eb;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1.5rem;font-family:-apple-system,sans-serif;font-size:13px;color:#0c447c;line-height:1.7">
+      <div style="font-weight:600;margin-bottom:4px;font-size:14px">Please review your intake details below</div>
+      This is not a formal agreement and you will not be charged. Review your information for accuracy, then click <strong>Approve &amp; Submit</strong> at the bottom of this page. Arrow Consulting will follow up with a formal consulting agreement for your signature before any payment is requested.
     </div>
 
-    <div class="agreement-doc" id="agreement-doc">
-      <!-- populated by JS -->
+    <div class="agreement-doc" id="agreement-doc"></div>
+
+    <div style="background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-top:1.25rem">
+      <p style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--gray-600);margin-bottom:1rem;line-height:1.6">
+        By clicking <strong>Approve &amp; Submit</strong>, you confirm that the information above is accurate to the best of your knowledge. This does not constitute a binding agreement and no payment is due at this time.
+      </p>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goBack()" style="flex:0">&#8592; Edit intake</button>
+        <button class="btn btn-primary" onclick="approveAndSubmit()">Approve &amp; submit &rarr;</button>
+      </div>
     </div>
 
-    <div class="btn-row no-print" style="margin-top:1.25rem">
-      <button class="btn btn-secondary" onclick="goBack()">&#8592; Edit intake</button>
-      <button class="btn btn-primary" onclick="window.print()">Print / save PDF &rarr;</button>
+  </div><!-- /review-view -->
+
+  <!-- ══ STEP 3: CONFIRMATION ══ -->
+  <div id="confirmation-view" style="display:none">
+
+    <div style="background:var(--green-light);border:1px solid #97c459;border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:14px">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="flex-shrink:0;margin-top:2px"><circle cx="14" cy="14" r="13" stroke="#3b6d11" stroke-width="1.5"/><path d="M8.5 14l4 4 7-7" stroke="#3b6d11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <div style="font-family:-apple-system,sans-serif;font-weight:600;font-size:16px;color:var(--green);margin-bottom:4px">Intake successfully submitted!</div>
+        <div style="font-family:-apple-system,sans-serif;font-size:13px;color:#3b6d11;line-height:1.6">Thank you — Arrow Consulting has received your intake. Here's what happens next.</div>
+      </div>
     </div>
 
-  </div><!-- /agreement-view -->
+    <!-- Next steps -->
+    <div class="card" style="margin-bottom:1.25rem">
+      <div class="card-title">What to expect</div>
+      <div style="display:flex;flex-direction:column;gap:0">
+
+        <div style="display:flex;gap:16px;padding:1rem 0;border-bottom:1px solid var(--gray-100)">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+          <div>
+            <div style="font-family:-apple-system,sans-serif;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:3px">Formal agreement sent for signature</div>
+            <div style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--gray-600);line-height:1.6">Arrow Consulting will review your intake and send a formal consulting agreement to your email for electronic signature. That agreement is the binding contract — nothing is finalized until it is signed.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;padding:1rem 0;border-bottom:1px solid var(--gray-100)">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+          <div>
+            <div style="font-family:-apple-system,sans-serif;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:3px">Secure payment invoice sent</div>
+            <div style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--gray-600);line-height:1.6">After the agreement is signed, a secure payment invoice will be sent to the email address on file. No payment is collected before the agreement is executed.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;padding:1rem 0;border-bottom:1px solid var(--gray-100)">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+          <div>
+            <div style="font-family:-apple-system,sans-serif;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:3px">Documents delivered within 3 business days</div>
+            <div style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--gray-600);line-height:1.6">Upon receipt of payment, your completed documents will be delivered via a secure Dropbox link within 3 business days. The package includes all documents required for submission to your FSDO along with step-by-step submission instructions.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;padding:1rem 0">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+          <div>
+            <div style="font-family:-apple-system,sans-serif;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:3px">Questions? We're here.</div>
+            <div style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--gray-600);line-height:1.6">Don't hesitate to reach out at any point in the process.<br>
+              <a href="https://arrowcertsolutions.com" style="color:var(--blue)">arrowcertsolutions.com</a> &nbsp;·&nbsp;
+              <a href="tel:7277353148" style="color:var(--blue)">727-735-3148</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Intake summary download -->
+    <div class="card">
+      <div class="card-title">Your intake summary</div>
+      <p style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--gray-600);margin-bottom:1rem;line-height:1.6">A copy of your submitted intake details is shown below for your records. You can download it as a PDF using your browser's print function.</p>
+      <div id="confirmation-summary"></div>
+      <div class="btn-row" style="margin-top:1.25rem">
+        <button class="btn btn-primary" onclick="window.print()">Download intake summary (print to PDF) &rarr;</button>
+      </div>
+    </div>
+
+  </div><!-- /confirmation-view -->
 
 </div><!-- /main -->
 
@@ -622,6 +733,7 @@
   <input type="hidden" name="additional_notes" id="fs-notes">
   <input type="hidden" name="recommended_package" id="fs-pkg">
   <input type="hidden" name="flags" id="fs-flags">
+  <input type="hidden" name="opspecs_requested" id="fs-opspecs">
   <button type="submit" data-fs-submit-btn style="display:none">Submit</button>
 </form>
 <script>
@@ -640,11 +752,73 @@ function selectPill(el, group, val) {
   evalForm();
 }
 function togglePill(el, group, val) {
-  el.classList.toggle('selected');
-  evalForm();
+  /* Let the browser toggle the checkbox first, then sync the class */
+  setTimeout(function() {
+    const cb = el.querySelector('input[type="checkbox"]');
+    el.classList.toggle('selected', cb && cb.checked);
+    evalForm();
+  }, 0);
 }
 
-/* ── Read helpers ── */
+/* ── Multi-aircraft builder ── */
+function buildExtraAircraft(count) {
+  const container = document.getElementById('extra-aircraft');
+  container.innerHTML = '';
+  if (count < 2) { container.style.display = 'none'; return; }
+  container.style.display = 'block';
+  for (let i = 2; i <= count; i++) {
+    const block = document.createElement('div');
+    block.style.cssText = 'border-top:1px solid var(--gray-100);margin-top:1rem;padding-top:1rem';
+    block.innerHTML = `
+      <div style="font-family:-apple-system,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--gray-400);margin-bottom:10px">Aircraft ${i}</div>
+      <div class="two-col">
+        <div class="field"><label>Make &amp; model</label><input type="text" id="f-aircraft-${i}" placeholder="e.g. Piper PA-18"></div>
+        <div class="field"><label>N-Number (if known)</label><input type="text" id="f-nnum-${i}" placeholder="e.g. N67890"></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Category</label>
+          <select id="f-cat-${i}">
+            <option value="">Select…</option>
+            <option>Single-engine piston (ASEL)</option>
+            <option>Single-engine turboprop (ASEL)</option>
+            <option>Multi-engine piston (AMEL)</option>
+            <option>Multi-engine turboprop (AMEL)</option>
+            <option>Helicopter (rotorcraft)</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Passenger seats</label><input type="number" id="f-seats-${i}" placeholder="e.g. 3" min="1" max="30" style="width:100%"></div>
+      </div>
+    `;
+    container.appendChild(block);
+  }
+}
+
+function getNumAircraft() {
+  const v = getRadio('numac');
+  if (!v) return 0;
+  if (v === '4plus') return 4;
+  return parseInt(v);
+}
+
+function getAircraftSummary() {
+  const n = getNumAircraft();
+  const lines = [];
+  for (let i = 1; i <= n; i++) {
+    const model = i === 1 ? val('f-aircraft') : val('f-aircraft-' + i);
+    const nnum = i === 1 ? val('f-nnum-1') : val('f-nnum-' + i);
+    const cat = i === 1 ? val('f-cat') : val('f-cat-' + i);
+    const seats = i === 1 ? val('f-seats-1') : val('f-seats-' + i);
+    if (model || nnum) {
+      let line = `Aircraft ${i}: ${model || '—'}`;
+      if (nnum) line += ` (${nnum})`;
+      if (cat) line += ` — ${cat}`;
+      if (seats) line += ` — ${seats} seats`;
+      lines.push(line);
+    }
+  }
+  return lines.join('\n');
+}
 function getRadio(name) {
   const el = document.querySelector('input[name="' + name + '"]:checked');
   return el ? el.value : '';
@@ -669,6 +843,7 @@ function evalForm() {
   const fsdoContact = val('f-fsdo-contact');
   const appDate = getRadio('appdate');
   const cat = val('f-cat');
+  const numac = getNumAircraft();
 
   const isHAA = ops.includes('haa');
   const isMulti = cat.includes('Multi') || cat.includes('Helicopter');
@@ -676,13 +851,20 @@ function evalForm() {
   const isActive = fsdoContact === 'active';
   const isPostMay = appDate === 'post-may2024' || appDate === 'unsure-date';
   const isOther = cert === 'other';
+  const isBasic = cert === 'basic-135';
+  const isMultiAC = numac >= 2;
+
+  /* Build extra aircraft fields */
+  buildExtraAircraft(numac);
 
   showFlag('flag-haa', isHAA);
-  showFlag('flag-multi', isMulti && cert === 'new-sp' && !isHAA);
+  showFlag('flag-multi', isMulti && (cert === 'new-sp' || isBasic) && !isHAA);
   showFlag('flag-larger', isLarger);
   showFlag('flag-active', isActive);
   showFlag('flag-sms', isPostMay && cert !== '');
   showFlag('flag-other', isOther);
+  showFlag('flag-basic135', isBasic);
+  showFlag('flag-multiaircraft', isMultiAC);
 
   const box = document.getElementById('outcome-box');
   const pkgEl = document.getElementById('outcome-pkg');
@@ -704,15 +886,35 @@ function evalForm() {
   }
 
   if (cert === 'new-sp' && !isHAA && !isLarger) {
+    /* ── Single-pilot pricing matrix ── */
+    const isIntl = ops.includes('international');
+    const isIFR  = ops.includes('ifr');
+    const isNight = ops.includes('vfr-night');
+    const isMultiACsp = numac >= 2;
+
+    let basePrice, tier;
+    if (isIntl)       { basePrice = 7950;  tier = 'International'; }
+    else if (isIFR)   { basePrice = 6850;  tier = 'IFR'; }
+    else if (isNight) { basePrice = 4850;  tier = 'Night VFR'; }
+    else              { basePrice = 4600;  tier = 'Day VFR'; }
+
     pkgEl.textContent = 'Single-pilot Part 135 — DIY package';
-    priceEl.textContent = '$3,900 · includes 5 consulting hours · additional time at $150/hr';
+    priceEl.textContent = '$' + basePrice.toLocaleString() + ' (' + tier + ') · includes 5 consulting hours · additional time at $150/hr';
+    if (isMultiACsp) addNote('Multiple aircraft — each aircraft authorized separately in OpSpecs', true);
     if (isPostMay) addNote('SMS program required — included', true);
     if (isMulti) addNote('Aircraft category may need scope review before document delivery', false);
     if (isActive) addNote('Active FSDO contact — timeline requires confirmation', false);
     if (!isMulti && !isActive) addNote('Qualifies for standard DIY package', true);
+  } else if (isBasic && !isHAA) {
+    pkgEl.textContent = 'Basic Part 135 — Full consulting engagement';
+    priceEl.textContent = 'Custom pricing — contact for quote after scope review';
+    addNote('Basic Part 135 requires DO, Chief Pilot, and DOM designations plus full manual set', false);
+    addNote('Recommend discussing single-pilot pathway first — faster to certificate, upgrade to Basic is straightforward', false);
+    if (isMultiAC) addNote('Multiple aircraft will require individual OpSpec authorizations', false);
+    if (isPostMay) addNote('SMS program required', false);
   } else if (cert === 'opspec' || isHAA) {
     pkgEl.textContent = 'OpSpec addition / amendment';
-    priceEl.textContent = isHAA ? '$6,900 — OpSpec A021 (HAA / Subpart L)' : '$6,900 base — scope confirmed on intake call';
+    priceEl.textContent = isHAA ? '$12,250 — OpSpec A021 (HAA / Subpart L)' : '$6,900 base — scope confirmed on intake call';
     if (isHAA) addNote('Full Subpart L scope: Risk Analysis Worksheet, GOM revisions, training program', true);
     if (isActive) addNote('Verify current OpSpec status with CMT before starting', false);
   } else if (cert === 'full' || isLarger) {
@@ -755,6 +957,8 @@ function submitIntake() {
     address: val('f-address'),
     state: val('f-state'),
     certType: certType,
+    numAircraft: getRadio('numac'),
+    aircraftSummary: getAircraftSummary(),
     aircraft: val('f-aircraft'),
     cat: val('f-cat'),
     ops: ops.join(', '),
@@ -767,6 +971,7 @@ function submitIntake() {
     pilots: getRadio('pilots'),
     desc: val('f-desc'),
     notes: val('f-notes'),
+    opspecs: getSelectedOpSpecs(),
     pkg: document.getElementById('outcome-pkg').textContent,
     price: document.getElementById('outcome-price').textContent,
     date: new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})
@@ -796,16 +1001,63 @@ function submitIntake() {
     if (txt) activeFlags.push(txt);
   });
   document.getElementById('fs-flags').value = activeFlags.join(' | ') || 'none';
+  document.getElementById('fs-opspecs').value = intakeData.opspecs;
 
   /* Submit to Formspree via Ajax SDK */
   const submitBtn = document.querySelector('[data-fs-submit-btn]');
   if (submitBtn) submitBtn.click();
 
-  /* Render agreement */
+  /* Render agreement into review view */
   renderAgreement();
   document.getElementById('intake-view').style.display = 'none';
-  document.getElementById('agreement-view').style.display = 'block';
-  document.getElementById('confirm-banner').classList.add('show');
+  document.getElementById('review-view').style.display = 'block';
+  document.getElementById('tab-1').className = 'step-tab done';
+  document.getElementById('tab-2').className = 'step-tab active';
+  document.getElementById('tab-3').className = 'step-tab';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function approveAndSubmit() {
+  /* Build confirmation summary table */
+  const d = intakeData;
+  const summaryRows = [
+    ['Date', d.date],
+    ['Contact name', d.name],
+    ['Company', d.company],
+    ['Email', d.email],
+    ['Phone', d.phone],
+    ['Address', d.address],
+    ['State of incorporation', d.state || '—'],
+    ['Certification requested', d.certType],
+    ['Number of aircraft', d.numAircraft || '—'],
+    ['Aircraft details', d.aircraftSummary ? d.aircraftSummary.replace(/\n/g,'<br>') : '—'],
+    ['Intended operations', d.ops],
+    ['FSDO', d.fsdo],
+    ['Prior FAA contact', d.fsdoContact || '—'],
+    ['HazMat', d.hazmat],
+    ['Application date', d.appDate],
+    ['Pilot certificate', d.certHeld || '—'],
+    ['Instrument rating', d.ir || '—'],
+    ['Pilot count', d.pilots || '—'],
+    ['Package', d.pkg],
+    ['Estimated fee', d.price ? d.price.split('·')[0].trim() : '—'],
+    ['OpSpecs requested', d.opspecs || '—'],
+    ['Operation description', d.desc],
+    ['Additional notes', d.notes || '—'],
+  ];
+
+  const tableHtml = `<table style="width:100%;font-family:-apple-system,sans-serif;font-size:13px;border-collapse:collapse">
+    ${summaryRows.map((r, i) => `
+      <tr style="background:${i%2===0?'#f8f8f7':'#fff'}">
+        <td style="padding:7px 10px;color:#5f5e5a;white-space:nowrap;vertical-align:top;width:38%">${r[0]}</td>
+        <td style="padding:7px 10px;color:#1a1a18;vertical-align:top">${r[1]}</td>
+      </tr>`).join('')}
+  </table>`;
+
+  document.getElementById('confirmation-summary').innerHTML = tableHtml;
+
+  document.getElementById('review-view').style.display = 'none';
+  document.getElementById('confirmation-view').style.display = 'block';
   document.getElementById('tab-1').className = 'step-tab done';
   document.getElementById('tab-2').className = 'step-tab done';
   document.getElementById('tab-3').className = 'step-tab active';
@@ -813,31 +1065,176 @@ function submitIntake() {
 }
 
 function goBack() {
-  document.getElementById('agreement-view').style.display = 'none';
+  document.getElementById('review-view').style.display = 'none';
+  document.getElementById('confirmation-view').style.display = 'none';
   document.getElementById('intake-view').style.display = 'block';
-  document.getElementById('confirm-banner').classList.remove('show');
   document.getElementById('tab-1').className = 'step-tab active';
   document.getElementById('tab-2').className = 'step-tab';
   document.getElementById('tab-3').className = 'step-tab';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ── Agreement renderer ── */
+/* ══ OpSpec Data ══ */
+const OPSPECS = [
+  { group: 'Part A — General, Management & Authorization', items: [
+    { id:"A001", label:"A001 — Issuance and Applicability", desc:"Identifies legal name, operator addresses, kinds of operations authorized, and regulation basis.", std:true, complex:false },
+    { id:"A002", label:"A002 — Definitions and Abbreviations", desc:"Definitions of words or phrases used in other OpSpec paragraphs.", std:true, complex:false },
+    { id:"A003", label:"A003 — Airplane/Aircraft Authorization", desc:"Authorizes aircraft make/model/series configuration and operations for Part 135.", std:true, complex:false },
+    { id:"A004", label:"A004 — Summary of Special Authorizations and Limitations", desc:"Summarizes optional authorizations applicable to the operator.", std:true, complex:false },
+    { id:"A005", label:"A005 — Exemptions and Deviations", desc:"Required when operator conducts operations under any FAA-granted exemption or deviation.", std:false, complex:true },
+    { id:"A006", label:"A006 — Management Personnel", desc:"Identifies management personnel occupying required 14 CFR Part 119 management positions.", std:true, complex:false },
+    { id:"A007", label:"A007 — Other Designated Persons", desc:"Identifies agent for service, persons authorized to make major repairs/alterations, and other designees.", std:true, complex:false },
+    { id:"A008", label:"A008 — Operational Control", desc:"Defines the operational control system used by the certificate holder for Part 135 flight operations.", std:true, complex:false },
+    { id:"A009", label:"A009 — Airport Aeronautical Data", desc:"Authorizes specific airport aeronautical data sources used for navigation and operations planning.", std:true, complex:false },
+    { id:"A010", label:"A010 — Aviation Weather Information", desc:"Authorizes specific weather data sources used for flight planning and operations.", std:true, complex:false },
+    { id:"A011", label:"A011 — Approved Carry-On Baggage Program", desc:"Required for operators permitting carry-on baggage — defines approval criteria and program standards.", std:false, complex:false },
+    { id:"A013", label:"A013 — Operations Without Certain Emergency Equipment", desc:"Authorizes deviation from certain emergency equipment requirements for extended overwater ops.", std:false, complex:true },
+    { id:"A014", label:"A014 — Special En Route IFR Operations in Class G Airspace", desc:"Authorizes IFR en route operations in Class G airspace where no IFR routing exists.", std:false, complex:true },
+    { id:"A015", label:"A015 — Autopilot in Lieu of Required Second in Command", desc:"Authorizes use of an autopilot in place of an SIC per §135.105(b).", std:false, complex:true },
+    { id:"A019", label:"A019 — Automotive Gasoline as Aircraft Fuel", desc:"Authorizes use of automotive gasoline in reciprocating engine aircraft for Part 135 cargo ops.", std:false, complex:true },
+    { id:"A020", label:"A020 — Airplane Operations Without Instrument Rated Pilots", desc:"Authorizes VFR-only airplane operations without instrument-rated pilots under specific criteria.", std:false, complex:true },
+    { id:"A021", label:"A021 — Helicopter Air Ambulance (HAA) Operations — Subpart L", desc:"Authorizes HAA VFR and IFR medical transport operations under 14 CFR Part 135 Subpart L.", std:false, complex:true },
+    { id:"A023", label:"A023 — Pre-Takeoff Contamination Check Procedure (Icing)", desc:"Authorizes approved procedure for determining operations during ground icing conditions.", std:false, complex:false },
+    { id:"A024", label:"A024 — Air Ambulance Operations — Airplane", desc:"Authorizes airplane air ambulance operations under Part 135.", std:false, complex:true },
+    { id:"A025", label:"A025 — Electronic Signatures, Recordkeeping, and Manual Systems", desc:"Authorizes electronic signatures, electronic recordkeeping systems, and electronic manual systems.", std:false, complex:true },
+    { id:"A027", label:"A027 — Land and Hold Short Operations (LAHSO)", desc:"Optional authorization for land-and-hold-short operations at qualifying airports.", std:false, complex:true },
+    { id:"A028", label:"A028 — Aircraft Wet Lease Arrangements", desc:"Authorizes wet lease arrangements where aircraft and at least one crewmember are provided.", std:false, complex:true },
+    { id:"A029", label:"A029 — Aircraft Interchange Arrangements", desc:"Authorizes interchange agreements between operators for shared aircraft use.", std:false, complex:true },
+    { id:"A031", label:"A031 — Contract Training Arrangements", desc:"Authorizes use of contract training organizations, training centers, or other Part 135 training arrangements.", std:false, complex:false },
+    { id:"A033", label:"A033 — Part 135 Flight and Rest Time Requirements (All-Cargo)", desc:"Authorizes alternate flight/rest time requirements for certain Part 135 or Part 121 all-cargo operations.", std:false, complex:false },
+    { id:"A034", label:"A034 — Advanced Qualification Program (AQP)", desc:"Required after initial AQP approval — authorizes AQP in lieu of standard training requirements.", std:false, complex:true },
+    { id:"A037", label:"A037 — Basic Part 135 Operator — Commuter and On-Demand", desc:"Identifies operator as a Basic Part 135 certificate holder authorized for commuter and on-demand ops.", std:false, complex:false },
+    { id:"A038", label:"A038 — Basic Part 135 Operator — On-Demand Only", desc:"Identifies operator as a Basic Part 135 certificate holder authorized for on-demand operations only.", std:false, complex:false },
+    { id:"A039", label:"A039 — Single Pilot in Command Operator (Part 135)", desc:"Authorizes single PIC operator with up to 3 SICs — pilots listed by name on the OpSpec.", std:false, complex:false },
+    { id:"A040", label:"A040 — Single Pilot Operator (Part 135)", desc:"True single-pilot operator — one pilot listed by name; most restrictive Part 135 authorization.", std:false, complex:false },
+    { id:"A041", label:"A041 — Pre-Takeoff Contamination Check Authorization", desc:"Authorizes Part 135 airplane operators to conduct pre-takeoff contamination checks per §135.227.", std:false, complex:false },
+    { id:"A042", label:"A042 — Airplane Ops Without Deicing Procedure (No Icing Conditions)", desc:"Authorizes Part 135 airplane operations without a deicing/anti-icing procedure when ground icing conditions do not exist.", std:false, complex:false },
+    { id:"A046", label:"A046 — Single-Engine IFR (SEIFR) Passenger-Carrying Operations", desc:"Authorizes SEIFR passenger-carrying operations under Part 135 — requires specific aircraft and training.", std:false, complex:true },
+    { id:"A048", label:"A048 — Verification of Personnel for Flightdeck Access", desc:"Optional — authorizes approved program for verifying persons eligible for flightdeck access.", std:false, complex:false },
+    { id:"A050", label:"A050 — Helicopter Night Vision Goggle Operations (HNVGO)", desc:"Optional authorization for helicopter NVG operations under Part 135.", std:false, complex:true },
+    { id:"A051", label:"A051 — Airplane Night Vision Goggle (ANVG) Operations", desc:"Optional authorization for airplane NVG operations under Part 135.", std:false, complex:true },
+    { id:"A055", label:"A055 — Carriage of Hazardous Materials (HazMat)", desc:"Authorizes Will Carry or Will Not Carry HazMat operations — defines program requirements.", std:true, complex:false },
+    { id:"A056", label:"A056 — Data Link Communications", desc:"Authorizes use of data link communications systems for operational communications.", std:false, complex:true },
+    { id:"A057", label:"A057 — Eligible On-Demand Operations", desc:"Authorizes eligible on-demand operations per §135.4 — allows certain scheduled-like operations.", std:false, complex:false },
+    { id:"A062", label:"A062 — Second in Command Professional Development Program (SIC PDP)", desc:"Optional — authorizes SIC PDP allowing SICs to log PIC time under specific conditions.", std:false, complex:true },
+    { id:"A063", label:"A063 — Flightcrew Member Certificate Verification Plan", desc:"Optional — authorizes an approved plan for verifying flightcrew certificate authenticity.", std:false, complex:false },
+    { id:"A096", label:"A096 — Actual Weight Program — All Aircraft", desc:"Authorizes use of actual weights (vs. standard weights) for all passenger and cargo operations.", std:false, complex:false },
+    { id:"A097", label:"A097 — Small Cabin Aircraft Passenger and Baggage Weight Program", desc:"Authorizes standard/average weight programs for small cabin aircraft (5–29 original seats).", std:false, complex:false },
+    { id:"A160", label:"A160 — LODA — Part 135 Rotorcraft Operations Without Radio Altimeter", desc:"Letter of Deviation Authority for Part 135 rotorcraft operations without a radio altimeter.", std:false, complex:true },
+    { id:"A447", label:"A447 — Emergency Airworthiness Directive (AD) Notification", desc:"Establishes emergency AD notification and receipt requirements for the certificate holder.", std:false, complex:false },
+    { id:"A449", label:"A449 — Antidrug and Alcohol Misuse Prevention Program", desc:"Authorizes the operator's DOT antidrug and alcohol misuse prevention program per Part 120.", std:true, complex:false },
+  ]},
+];
+
+function buildOpSpecs() {
+  const container = document.getElementById('opspec-groups');
+  OPSPECS.forEach(function(group) {
+    const section = document.createElement('div');
+    section.style.cssText = 'margin-bottom:1.5rem';
+
+    const heading = document.createElement('div');
+    heading.style.cssText = 'font-family:-apple-system,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--gray-400);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gray-100)';
+    heading.textContent = group.group;
+    section.appendChild(heading);
+
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:1fr;gap:6px';
+
+    group.items.forEach(function(item) {
+      const row = document.createElement('label');
+      row.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid var(--gray-200);border-radius:var(--radius);cursor:pointer;background:#fff;transition:border-color 0.12s,background 0.12s';
+      row.dataset.opspecId = item.id;
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.name = 'opspec';
+      cb.value = item.id;
+      cb.style.cssText = 'margin-top:2px;flex-shrink:0;accent-color:var(--blue)';
+      if (item.std) cb.checked = true;
+
+      const text = document.createElement('div');
+      text.style.cssText = 'flex:1;min-width:0';
+
+      const labelLine = document.createElement('div');
+      labelLine.style.cssText = 'font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;color:var(--gray-900)';
+      labelLine.textContent = item.label;
+
+      const descLine = document.createElement('div');
+      descLine.style.cssText = 'font-family:-apple-system,sans-serif;font-size:12px;color:var(--gray-400);margin-top:2px';
+      descLine.textContent = item.desc;
+
+      text.appendChild(labelLine);
+      text.appendChild(descLine);
+      row.appendChild(cb);
+      row.appendChild(text);
+
+      if (item.std) {
+        row.style.background = 'var(--blue-light)';
+        row.style.borderColor = '#85b7eb';
+        const badge = document.createElement('span');
+        badge.style.cssText = 'font-family:-apple-system,sans-serif;font-size:10px;font-weight:600;background:#185FA5;color:#fff;border-radius:4px;padding:2px 6px;flex-shrink:0;margin-top:1px';
+        badge.textContent = 'standard';
+        row.appendChild(badge);
+      }
+
+      cb.addEventListener('change', function() {
+        if (cb.checked) {
+          row.style.background = item.std ? 'var(--blue-light)' : '#f0f7ff';
+          row.style.borderColor = '#85b7eb';
+        } else {
+          row.style.background = '#fff';
+          row.style.borderColor = 'var(--gray-200)';
+        }
+        checkComplexOpSpecs();
+      });
+
+      grid.appendChild(row);
+    });
+
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+}
+
+function checkComplexOpSpecs() {
+  const checked = [...document.querySelectorAll('input[name="opspec"]:checked')].map(i => i.value);
+  const complexItems = OPSPECS.flatMap(g => g.items).filter(i => i.complex);
+  const hasComplex = complexItems.some(i => checked.includes(i.id));
+  showFlag('flag-opspec-complex', hasComplex);
+}
+
+function getSelectedOpSpecs() {
+  return [...document.querySelectorAll('input[name="opspec"]:checked')].map(i => i.value).join(', ');
+}
+
+/* Init OpSpecs on load */
+document.addEventListener('DOMContentLoaded', function() {
+  buildOpSpecs();
+});
+
+/* ══ End OpSpec ══ */
 function renderAgreement() {
   const d = intakeData;
   const isHAA = d.ops.includes('haa');
   const isOpSpec = d.certType === 'opspec' || isHAA;
   const isSP = d.certType === 'new-sp' && !isHAA;
+  const isBasic = d.certType === 'basic-135' && !isHAA;
+  const multiAC = d.numAircraft && d.numAircraft !== '1';
+
+  /* Build aircraft list for scope section */
+  const acLines = d.aircraftSummary
+    ? d.aircraftSummary.split('\n').filter(Boolean).map(l => `<li>${l}</li>`).join('')
+    : `<li>${f(d.aircraft)}${d.cat ? ' (' + d.cat + ')' : ''}</li>`;
 
   const f = (v) => '<span class="filled">' + (v || '_______________') + '</span>';
 
   let html = '';
 
-  if (isSP) {
+  if (isSP || isBasic) {
     /* ── Single-pilot baseline ── */
     html = `
       <h2>Consulting Agreement</h2>
-      <p class="agreement-sub">FAA Part 135 Documentation &amp; Certification Support</p>
+      <p class="agreement-sub">FAA Part 135 Documentation &amp; Certification Support${isBasic ? ' — Basic Part 135 (Multi-Pilot / Multi-Aircraft)' : ' — Single-Pilot Certificate'}</p>
       <p class="parties">
         This Consulting Agreement (&ldquo;Agreement&rdquo;) is entered into as of ${f(d.date)}, by and between:<br><br>
         <strong>Consultant:</strong> Arrow Consulting LLC, located at 6942 Avalanche Circle, Anchorage, AK 99516<br><br>
@@ -851,25 +1248,29 @@ function renderAgreement() {
       </p>
 
       <p><span class="section-num">1. Purpose</span><br>
-      Client desires professional consulting services to assist with preparation of documentation required for FAA Part 135 single-pilot certification. Consultant agrees to provide such services under the terms of this Agreement.</p>
+      Client desires professional consulting services to assist with preparation of documentation required for FAA Part 135 ${isBasic ? 'Basic certificate (commuter and on-demand operations, multiple pilots and aircraft)' : 'single-pilot certification'}. Consultant agrees to provide such services under the terms of this Agreement.</p>
 
       <p><span class="section-num">2. Scope of Services</span><br>
-      Consultant will provide professionally prepared templates, guidance, and consulting support for documentation customarily required for FAA Part 135 single-pilot certification, which may include:</p>
+      Consultant will provide professionally prepared templates, guidance, and consulting support for documentation customarily required for FAA Part 135 ${isBasic ? 'Basic' : 'single-pilot'} certification, which may include:</p>
       <ul>
-        <li>Single-Pilot Part 135 Compliance Statement</li>
+        <li>Part 135 Compliance Statement${isBasic ? ' (Basic operator — commuter and on-demand)' : ' (single-pilot)'}</li>
         <li>SMS Program and Policy documentation</li>
         <li>Drug &amp; Alcohol program consultation</li>
         <li>Company Maintenance, Training and Pilot Record Forms</li>
         <li>Compilation of checklists and compliance procedures</li>
         <li>Hazardous Materials &mdash; &ldquo;${f(d.hazmat === 'will-carry' ? 'WILL CARRY' : 'WILL NOT CARRY')}&rdquo; designation</li>
+        ${isBasic ? '<li>Management personnel structure and position documentation (DO, Chief Pilot, DOM)</li><li>General Operations Manual (GOM) framework</li><li>Training program structure</li>' : ''}
         <li>FAA Application and certification guidance and reasonable revisions within allotted hours</li>
       </ul>
+      ${multiAC ? `<p><strong>Aircraft authorized under this engagement:</strong></p><ul>${acLines}</ul>` : ''}
       <p class="exclusions"><strong>Exclusions:</strong> Electronic Flight Bag (EFB) programs, electronic recordkeeping systems, software implementation, legal services, FAA representation, ongoing operational management, or other services not expressly stated herein.</p>
 
       <p><span class="section-num">3. Consulting Hours and Fees</span><br>
-      <strong>Base Package Fee: $3,900 (USD)</strong><br>
-      Included Time: Up to 5 consulting hours. Consulting time includes meetings, calls, document preparation after initial submission, customization, revisions, correspondence, and research performed on Client&rsquo;s behalf.</p>
-      <p><strong>Additional Time:</strong> Work exceeding 5 hours will be billed at $150 per hour in 0.25-hour increments. Consultant will notify Client prior to exceeding included hours. Any expanded scope or additional hours must be approved in advance by Client, either in writing or by documented verbal confirmation.</p>
+      ${isBasic
+        ? '<strong>Consulting Fee: To be determined following scope review.</strong> Basic Part 135 engagements require a discovery call to confirm management personnel structure, manual requirements, and aircraft count before a firm fee is established. A written Statement of Work will be issued prior to commencement of services. Additional time beyond agreed scope will be billed at $150 per hour.'
+        : `<strong>Consulting Fee: ${f(d.price.split('·')[0].trim())}</strong><br>Included Time: Up to 5 consulting hours. Consulting time includes meetings, calls, document preparation after initial submission, customization, revisions, correspondence, and research performed on Client&rsquo;s behalf.`
+      }</p>
+      ${!isBasic ? '<p><strong>Additional Time:</strong> Work exceeding 5 hours will be billed at $150 per hour in 0.25-hour increments. Consultant will notify Client prior to exceeding included hours. Any expanded scope or additional hours must be approved in advance by Client, either in writing or by documented verbal confirmation.</p>' : ''}
 
       <p><span class="section-num">4. Payment Terms</span><br>
       Payment for the base package is due prior to delivery of final documents in template form unless otherwise agreed in writing. Additional hourly services will be invoiced after they are due. Consultant may suspend services for overdue invoices.</p>
@@ -1012,7 +1413,8 @@ function renderAgreement() {
         ['Address', d.address],
         ['State of incorporation', d.state || '—'],
         ['Certification requested', d.certType],
-        ['Aircraft', d.aircraft + (d.cat ? ' (' + d.cat + ')' : '')],
+        ['Number of aircraft', d.numAircraft || '—'],
+        ['Aircraft details', d.aircraftSummary ? d.aircraftSummary.replace(/\n/g, ' | ') : '—'],
         ['Intended operations', d.ops],
         ['FSDO', d.fsdo],
         ['Prior FAA contact', d.fsdoContact || '—'],
@@ -1024,6 +1426,7 @@ function renderAgreement() {
         ['Package', d.pkg],
         ['Operation description', d.desc],
         ['Additional notes', d.notes || '—'],
+        ['OpSpecs requested', d.opspecs || '—'],
       ])}
     </table>
     <p style="font-family:-apple-system,sans-serif;font-size:12px;color:var(--gray-400);margin-top:1.5rem;line-height:1.6">
