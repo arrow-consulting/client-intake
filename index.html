@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrow Consulting LLC — Client Intake</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0d2340;
+    --blue: #185FA5;
+    --blue-light: #e6f1fb;
+    --gold: #c8861a;
+    --gold-light: #faeeda;
+    --red: #a32d2d;
+    --red-light: #fcebeb;
+    --green: #3b6d11;
+    --green-light: #eaf3de;
+    --gray-50: #f8f8f7;
+    --gray-100: #efefed;
+    --gray-200: #dddcda;
+    --gray-400: #888780;
+    --gray-600: #5f5e5a;
+    --gray-900: #1a1a18;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    background: var(--navy);
+    padding: 2rem 2rem 1.75rem;
+    color: #fff;
+  }
+  .page-header-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .logo-mark {
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Georgia', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-top: 3px;
+  }
+  .page-header h1 {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    font-family: -apple-system, sans-serif;
+  }
+
+  /* ── Layout ── */
+  .main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── Step indicator ── */
+  .steps {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2.5rem;
+    border-bottom: 1.5px solid var(--gray-200);
+    padding-bottom: 0;
+  }
+  .step-tab {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    padding: 0 1.25rem 0.875rem;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    cursor: default;
+  }
+  .step-tab.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+  .step-tab.done { color: var(--green); }
+
+  /* ── Cards / sections ── */
+  .card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .card-title {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── Form fields ── */
+  .field { margin-bottom: 1.1rem; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-bottom: 5px;
+  }
+  .field label .req { color: var(--red); }
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="tel"],
+  .field select,
+  .field textarea {
+    width: 100%;
+    font-family: -apple-system, sans-serif;
+    font-size: 14px;
+    color: var(--gray-900);
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888780' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(24,95,165,0.1);
+  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 540px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── Pill selectors ── */
+  .pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 5px; }
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--gray-600);
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 20px;
+    padding: 6px 13px;
+    cursor: pointer;
+    transition: all 0.12s;
+    user-select: none;
+  }
+  .pill:hover { border-color: var(--blue); color: var(--blue); }
+  .pill input { display: none; }
+  .pill.selected {
+    background: var(--blue-light);
+    border-color: var(--blue);
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  /* ── Flags / alerts ── */
+  .flag {
+    display: none;
+    align-items: flex-start;
+    gap: 9px;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    border-radius: var(--radius);
+    padding: 10px 13px;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .flag.show { display: flex; }
+  .flag-warn { background: var(--gold-light); color: #7a5010; border: 1px solid #f5c46a; }
+  .flag-info { background: var(--blue-light); color: #0c447c; border: 1px solid #85b7eb; }
+  .flag-error { background: var(--red-light); color: var(--red); border: 1px solid #f09595; }
+  .flag-ok { background: var(--green-light); color: var(--green); border: 1px solid #97c459; }
+  .flag svg { flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Package outcome ── */
+  .outcome {
+    display: none;
+    background: var(--navy);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.25rem;
+    color: #fff;
+  }
+  .outcome.show { display: block; }
+  .outcome-eyebrow {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 6px;
+  }
+  .outcome-pkg {
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .outcome-price {
+    font-family: -apple-system, sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 12px;
+  }
+  .outcome-notes { display: flex; flex-direction: column; gap: 6px; }
+  .outcome-note {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .outcome-note svg { flex-shrink: 0; margin-top: 2px; }
+
+  /* ── Buttons ── */
+  .btn-row { display: flex; gap: 10px; margin-top: 1.5rem; }
+  .btn {
+    font-family: -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius);
+    padding: 11px 22px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--blue); color: #fff; flex: 1; }
+  .btn-primary:hover { background: #0c447c; }
+  .btn-secondary { background: var(--gray-100); color: var(--gray-600); }
+  .btn-secondary:hover { background: var(--gray-200); }
+
+  /* ── Agreement preview ── */
+  #agreement-view { display: none; }
+  .agreement-doc {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 3rem 3.5rem;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--gray-900);
+  }
+  @media (max-width: 600px) { .agreement-doc { padding: 1.5rem; } }
+  .agreement-doc h2 {
+    font-size: 16px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .agreement-doc .agreement-sub {
+    text-align: center;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 2rem;
+    color: var(--gray-600);
+  }
+  .agreement-doc .parties {
+    font-style: italic;
+    margin-bottom: 1.75rem;
+    line-height: 1.9;
+  }
+  .agreement-doc .section-num {
+    font-weight: 700;
+    font-style: italic;
+  }
+  .agreement-doc p { margin-bottom: 1rem; }
+  .agreement-doc ul { margin: 0.5rem 0 1rem 1.5rem; }
+  .agreement-doc ul li { margin-bottom: 0.4rem; }
+  .agreement-doc .exclusions { margin-bottom: 1rem; }
+  .agreement-doc .sig-block {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .agreement-doc .sig-col p { margin-bottom: 0.3rem; }
+  .agreement-doc .sig-line {
+    border-bottom: 1px solid var(--gray-400);
+    height: 28px;
+    margin-bottom: 4px;
+    margin-top: 8px;
+  }
+  .agreement-doc .sig-label {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--gray-400);
+  }
+  .agreement-doc .filled {
+    font-style: italic;
+    color: var(--blue);
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; }
+    .page-header, .steps, #intake-view, .btn-row, .no-print { display: none !important; }
+    #agreement-view { display: block !important; }
+    .agreement-doc { border: none; padding: 0; box-shadow: none; }
+    .main { padding: 0; max-width: 100%; }
+  }
+
+  /* ── Confirmation banner ── */
+  .confirm-banner {
+    display: none;
+    background: var(--green-light);
+    border: 1px solid #97c459;
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-family: -apple-system, sans-serif;
+    font-size: 14px;
+    color: var(--green);
+    margin-bottom: 1.25rem;
+    align-items: center;
+    gap: 10px;
+  }
+  .confirm-banner.show { display: flex; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="logo-mark">AC</div>
+    <div>
+      <h1>Arrow Consulting LLC</h1>
+      <p>FAA Part 135 Documentation &amp; Certification Support &nbsp;·&nbsp; Client Intake &amp; Engagement Agreement</p>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="steps">
+    <div class="step-tab active" id="tab-1">1. Intake</div>
+    <div class="step-tab" id="tab-2">2. Review package</div>
+    <div class="step-tab" id="tab-3">3. Agreement</div>
+  </div>
+
+  <div class="confirm-banner" id="confirm-banner">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#3b6d11" stroke-width="1.5"/><path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="#3b6d11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Intake submitted successfully. Your agreement is ready to review and sign below.
+  </div>
+
+  <!-- ══ STEP 1: INTAKE FORM ══ -->
+  <div id="intake-view">
+
+    <div class="card">
+      <div class="card-title">Applicant information</div>
+      <div class="two-col">
+        <div class="field"><label>Contact name <span class="req">*</span></label><input type="text" id="f-name" placeholder="Full legal name"></div>
+        <div class="field"><label>Company / DBA name <span class="req">*</span></label><input type="text" id="f-company" placeholder="Operating entity name"></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Email <span class="req">*</span></label><input type="email" id="f-email" placeholder="you@domain.com"></div>
+        <div class="field"><label>Phone <span class="req">*</span></label><input type="tel" id="f-phone" placeholder="(xxx) xxx-xxxx"></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Mailing address <span class="req">*</span></label><input type="text" id="f-address" placeholder="Street, City, State, ZIP"></div>
+        <div class="field"><label>State of incorporation / registration</label><input type="text" id="f-state" placeholder="e.g. Alaska"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Certification type requested</div>
+      <div class="field">
+        <label>What are you applying for? <span class="req">*</span></label>
+        <div class="pills" id="pills-cert">
+          <label class="pill" onclick="selectPill(this,'cert','new-sp')"><input type="radio" name="cert" value="new-sp"> New single-pilot Part 135 certificate</label>
+          <label class="pill" onclick="selectPill(this,'cert','opspec')"><input type="radio" name="cert" value="opspec"> OpSpec addition / amendment</label>
+          <label class="pill" onclick="selectPill(this,'cert','full')"><input type="radio" name="cert" value="full"> Full consulting engagement</label>
+          <label class="pill" onclick="selectPill(this,'cert','other')"><input type="radio" name="cert" value="other"> Other / unsure</label>
+        </div>
+        <div class="flag flag-warn show" id="flag-other" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Please call before submitting — we'll determine the right package together.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Aircraft &amp; operations</div>
+      <div class="two-col">
+        <div class="field"><label>Aircraft make &amp; model <span class="req">*</span></label><input type="text" id="f-aircraft" placeholder="e.g. Cessna 208B"></div>
+        <div class="field"><label>Aircraft category <span class="req">*</span></label>
+          <select id="f-cat" onchange="evalForm()">
+            <option value="">Select…</option>
+            <option>Single-engine piston (ASEL)</option>
+            <option>Single-engine turboprop (ASEL)</option>
+            <option>Multi-engine piston (AMEL)</option>
+            <option>Multi-engine turboprop (AMEL)</option>
+            <option>Helicopter (rotorcraft)</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Intended operations <span class="req">*</span></label>
+        <div class="pills" id="pills-ops">
+          <label class="pill" onclick="togglePill(this,'ops','vfr-day')"><input type="checkbox" name="ops" value="vfr-day"> VFR day</label>
+          <label class="pill" onclick="togglePill(this,'ops','vfr-night')"><input type="checkbox" name="ops" value="vfr-night"> VFR night</label>
+          <label class="pill" onclick="togglePill(this,'ops','ifr')"><input type="checkbox" name="ops" value="ifr"> IFR</label>
+          <label class="pill" onclick="togglePill(this,'ops','haa')"><input type="checkbox" name="ops" value="haa"> Helicopter air ambulance (HAA)</label>
+          <label class="pill" onclick="togglePill(this,'ops','international')"><input type="checkbox" name="ops" value="international"> International</label>
+          <label class="pill" onclick="togglePill(this,'ops','overwater')"><input type="checkbox" name="ops" value="overwater"> Extended overwater</label>
+        </div>
+        <div class="flag flag-warn" id="flag-haa">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+          HAA / Subpart L requires the OpSpec A021 package — pricing $6,900. Includes Risk Analysis Worksheet, GOM revisions, and training program.
+        </div>
+        <div class="flag flag-warn" id="flag-multi">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Multi-engine or helicopter operations may require expanded scope. We'll confirm before delivering documents.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">FSDO &amp; prior FAA contact</div>
+      <div class="two-col">
+        <div class="field"><label>FSDO jurisdiction <span class="req">*</span></label><input type="text" id="f-fsdo" placeholder="e.g. Anchorage FSDO"></div>
+        <div class="field"><label>Prior FAA contact on this application?</label>
+          <select id="f-fsdo-contact" onchange="evalForm()">
+            <option value="">Select…</option>
+            <option value="none">No contact yet</option>
+            <option value="informal">Informal conversation only</option>
+            <option value="pasi">PASI submitted or in progress</option>
+            <option value="active">Active certification in progress</option>
+          </select>
+        </div>
+      </div>
+      <div class="flag flag-warn" id="flag-active">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Active certifications in progress may require expedited scope and additional hours. We'll assess before committing to a timeline.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">HazMat &amp; SMS</div>
+      <div class="field">
+        <label>HazMat intent <span class="req">*</span></label>
+        <div class="pills" id="pills-hazmat">
+          <label class="pill" onclick="selectPill(this,'hazmat','will-carry')"><input type="radio" name="hazmat" value="will-carry"> Will Carry (active HazMat program required)</label>
+          <label class="pill" onclick="selectPill(this,'hazmat','will-not-carry')"><input type="radio" name="hazmat" value="will-not-carry"> Will Not Carry</label>
+          <label class="pill" onclick="selectPill(this,'hazmat','unsure')"><input type="radio" name="hazmat" value="unsure"> Unsure</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Approximate application / first FAA contact date <span class="req">*</span></label>
+        <div class="pills" id="pills-appdate">
+          <label class="pill" onclick="selectPill(this,'appdate','pre-may2024')"><input type="radio" name="appdate" value="pre-may2024"> Before May 2024</label>
+          <label class="pill" onclick="selectPill(this,'appdate','post-may2024')"><input type="radio" name="appdate" value="post-may2024"> May 2024 or later</label>
+          <label class="pill" onclick="selectPill(this,'appdate','unsure-date')"><input type="radio" name="appdate" value="unsure-date"> Unsure</label>
+        </div>
+        <div class="flag flag-info" id="flag-sms">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#0c447c" stroke-width="1.5"/><path d="M8 7v4M8 5v.5" stroke="#0c447c" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Applicants on or after May 2024 require a full SMS program — included in your package.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Pilot &amp; personnel</div>
+      <div class="two-col">
+        <div class="field"><label>Pilot certificate held <span class="req">*</span></label>
+          <select id="f-cert-held">
+            <option value="">Select…</option>
+            <option>Private (PPL)</option>
+            <option>Commercial (CPL)</option>
+            <option>ATP</option>
+            <option>Not yet held</option>
+          </select>
+        </div>
+        <div class="field"><label>Instrument rating?</label>
+          <select id="f-ir">
+            <option value="">Select…</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Number of pilots in the operation</label>
+        <div class="pills" id="pills-pilots">
+          <label class="pill" onclick="selectPill(this,'pilots','solo')"><input type="radio" name="pilots" value="solo"> Just me (single pilot)</label>
+          <label class="pill" onclick="selectPill(this,'pilots','small')"><input type="radio" name="pilots" value="small"> 2–5 pilots</label>
+          <label class="pill" onclick="selectPill(this,'pilots','larger')"><input type="radio" name="pilots" value="larger"> 6+ pilots</label>
+        </div>
+        <div class="flag flag-warn" id="flag-larger">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#7a5010" stroke-width="1.5" fill="none"/><path d="M8 6v3M8 11v.5" stroke="#7a5010" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Operations with 6+ pilots typically require full consulting scope, not the DIY package.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Operation description &amp; additional notes</div>
+      <div class="field">
+        <label>Describe your intended operation in plain language <span class="req">*</span></label>
+        <textarea id="f-desc" placeholder="e.g. Bear viewing flights out of King Salmon, single Cessna 206, VFR day only, solo pilot, Alaska FSDO…"></textarea>
+      </div>
+      <div class="field">
+        <label>Anything else we should know before starting work?</label>
+        <textarea id="f-notes" placeholder="Prior FAA denials, unusual aircraft config, tight timeline, prior certificate history, etc."></textarea>
+      </div>
+    </div>
+
+    <!-- Package outcome -->
+    <div class="outcome" id="outcome-box">
+      <div class="outcome-eyebrow">Recommended package</div>
+      <div class="outcome-pkg" id="outcome-pkg">—</div>
+      <div class="outcome-price" id="outcome-price"></div>
+      <div class="outcome-notes" id="outcome-notes"></div>
+    </div>
+
+    <div class="flag flag-error" id="flag-validation" style="margin-bottom:1rem">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#a32d2d" stroke-width="1.5"/><path d="M8 5v4M8 11v.5" stroke="#a32d2d" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span id="flag-validation-msg">Please complete all required fields.</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitIntake()">Submit intake &amp; generate agreement &rarr;</button>
+    </div>
+
+    <p style="font-family:-apple-system,sans-serif;font-size:12px;color:var(--gray-400);margin-top:1rem;line-height:1.6">
+      By submitting this form, you acknowledge that Arrow Consulting LLC provides advisory and documentation services only.
+      All FAA certification decisions are made solely by the FAA. Submitting this intake does not constitute a binding agreement —
+      the consulting agreement on the next step requires your signature.
+    </p>
+
+  </div><!-- /intake-view -->
+
+  <!-- ══ STEP 3: AGREEMENT ══ -->
+  <div id="agreement-view">
+
+    <div class="btn-row no-print" style="margin-bottom:1.25rem">
+      <button class="btn btn-secondary" onclick="goBack()">&#8592; Edit intake</button>
+      <button class="btn btn-primary" onclick="window.print()">Print / save PDF &rarr;</button>
+    </div>
+
+    <div class="agreement-doc" id="agreement-doc">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="btn-row no-print" style="margin-top:1.25rem">
+      <button class="btn btn-secondary" onclick="goBack()">&#8592; Edit intake</button>
+      <button class="btn btn-primary" onclick="window.print()">Print / save PDF &rarr;</button>
+    </div>
+
+  </div><!-- /agreement-view -->
+
+</div><!-- /main -->
+
+<!-- ══ HIDDEN FORMSPREE FORM (Ajax) ══ -->
+<div data-fs-success style="display:none"></div>
+<div data-fs-error style="display:none"></div>
+<form id="formspree-form" style="display:none">
+  <input type="hidden" name="_subject" id="fs-subject">
+  <input type="hidden" name="client_name" id="fs-name" data-fs-field>
+  <input type="hidden" name="company" id="fs-company" data-fs-field>
+  <input type="hidden" name="email" id="fs-email" data-fs-field>
+  <input type="hidden" name="phone" id="fs-phone">
+  <input type="hidden" name="address" id="fs-address">
+  <input type="hidden" name="state_of_incorporation" id="fs-state">
+  <input type="hidden" name="certification_type" id="fs-certtype">
+  <input type="hidden" name="aircraft" id="fs-aircraft">
+  <input type="hidden" name="aircraft_category" id="fs-cat">
+  <input type="hidden" name="operations" id="fs-ops">
+  <input type="hidden" name="fsdo" id="fs-fsdo">
+  <input type="hidden" name="prior_faa_contact" id="fs-fsdocontact">
+  <input type="hidden" name="hazmat" id="fs-hazmat">
+  <input type="hidden" name="application_date" id="fs-appdate">
+  <input type="hidden" name="pilot_certificate" id="fs-certhold">
+  <input type="hidden" name="instrument_rating" id="fs-ir">
+  <input type="hidden" name="num_pilots" id="fs-pilots">
+  <input type="hidden" name="operation_description" id="fs-desc">
+  <input type="hidden" name="additional_notes" id="fs-notes">
+  <input type="hidden" name="recommended_package" id="fs-pkg">
+  <input type="hidden" name="flags" id="fs-flags">
+  <button type="submit" data-fs-submit-btn style="display:none">Submit</button>
+</form>
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', { formElement: '#formspree-form', formId: 'xeendkwy' });
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+<script>
+var intakeData = {};
+
+/* ── Pill helpers ── */
+function selectPill(el, group, val) {
+  document.querySelectorAll('#pills-' + group + ' .pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  evalForm();
+}
+function togglePill(el, group, val) {
+  el.classList.toggle('selected');
+  evalForm();
+}
+
+/* ── Read helpers ── */
+function getRadio(name) {
+  const el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : '';
+}
+function getChecked(name) {
+  return [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(i => i.value);
+}
+function showFlag(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('show', show);
+}
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+/* ── Live evaluation ── */
+function evalForm() {
+  const cert = getRadio('cert');
+  const ops = getChecked('ops');
+  const pilots = getRadio('pilots');
+  const fsdoContact = val('f-fsdo-contact');
+  const appDate = getRadio('appdate');
+  const cat = val('f-cat');
+
+  const isHAA = ops.includes('haa');
+  const isMulti = cat.includes('Multi') || cat.includes('Helicopter');
+  const isLarger = pilots === 'larger';
+  const isActive = fsdoContact === 'active';
+  const isPostMay = appDate === 'post-may2024' || appDate === 'unsure-date';
+  const isOther = cert === 'other';
+
+  showFlag('flag-haa', isHAA);
+  showFlag('flag-multi', isMulti && cert === 'new-sp' && !isHAA);
+  showFlag('flag-larger', isLarger);
+  showFlag('flag-active', isActive);
+  showFlag('flag-sms', isPostMay && cert !== '');
+  showFlag('flag-other', isOther);
+
+  const box = document.getElementById('outcome-box');
+  const pkgEl = document.getElementById('outcome-pkg');
+  const priceEl = document.getElementById('outcome-price');
+  const notesEl = document.getElementById('outcome-notes');
+
+  if (!cert) { box.classList.remove('show'); return; }
+  box.classList.add('show');
+  notesEl.innerHTML = '';
+
+  function addNote(msg, ok) {
+    const d = document.createElement('div');
+    d.className = 'outcome-note';
+    const icon = ok
+      ? '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/><path d="M4.5 7l2 2 3.5-3.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2L12.5 11H1.5L7 2Z" stroke="rgba(255,200,100,0.8)" stroke-width="1.2" fill="none"/><path d="M7 6v2.5" stroke="rgba(255,200,100,0.8)" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    d.innerHTML = icon + '<span>' + msg + '</span>';
+    notesEl.appendChild(d);
+  }
+
+  if (cert === 'new-sp' && !isHAA && !isLarger) {
+    pkgEl.textContent = 'Single-pilot Part 135 — DIY package';
+    priceEl.textContent = '$3,900 · includes 5 consulting hours · additional time at $150/hr';
+    if (isPostMay) addNote('SMS program required — included', true);
+    if (isMulti) addNote('Aircraft category may need scope review before document delivery', false);
+    if (isActive) addNote('Active FSDO contact — timeline requires confirmation', false);
+    if (!isMulti && !isActive) addNote('Qualifies for standard DIY package', true);
+  } else if (cert === 'opspec' || isHAA) {
+    pkgEl.textContent = 'OpSpec addition / amendment';
+    priceEl.textContent = isHAA ? '$6,900 — OpSpec A021 (HAA / Subpart L)' : '$6,900 base — scope confirmed on intake call';
+    if (isHAA) addNote('Full Subpart L scope: Risk Analysis Worksheet, GOM revisions, training program', true);
+    if (isActive) addNote('Verify current OpSpec status with CMT before starting', false);
+  } else if (cert === 'full' || isLarger) {
+    pkgEl.textContent = 'Full consulting engagement';
+    priceEl.textContent = 'Custom pricing — contact for quote';
+    addNote('Scale of operations exceeds DIY package scope', false);
+    if (isActive) addNote('Active certification may require expedited timeline — confirm availability first', false);
+  } else if (cert === 'other') {
+    pkgEl.textContent = 'Needs qualification call';
+    priceEl.textContent = 'TBD after discovery conversation';
+    addNote('Call required before any work or documents delivered', false);
+  }
+}
+
+/* ── Submit & generate ── */
+function submitIntake() {
+  const required = ['f-name','f-company','f-email','f-phone','f-address','f-aircraft','f-fsdo','f-desc'];
+  const missing = required.filter(id => !val(id));
+  const certType = getRadio('cert');
+  const ops = getChecked('ops');
+  const hazmat = getRadio('hazmat');
+  const appDate = getRadio('appdate');
+
+  const validEl = document.getElementById('flag-validation');
+  const validMsg = document.getElementById('flag-validation-msg');
+
+  if (missing.length || !certType || ops.length === 0 || !hazmat || !appDate) {
+    validEl.classList.add('show');
+    validMsg.textContent = 'Please complete all required fields before continuing.';
+    validEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  validEl.classList.remove('show');
+
+  intakeData = {
+    name: val('f-name'),
+    company: val('f-company'),
+    email: val('f-email'),
+    phone: val('f-phone'),
+    address: val('f-address'),
+    state: val('f-state'),
+    certType: certType,
+    aircraft: val('f-aircraft'),
+    cat: val('f-cat'),
+    ops: ops.join(', '),
+    fsdo: val('f-fsdo'),
+    fsdoContact: val('f-fsdo-contact'),
+    hazmat: hazmat,
+    appDate: appDate,
+    certHeld: val('f-cert-held'),
+    ir: val('f-ir'),
+    pilots: getRadio('pilots'),
+    desc: val('f-desc'),
+    notes: val('f-notes'),
+    pkg: document.getElementById('outcome-pkg').textContent,
+    price: document.getElementById('outcome-price').textContent,
+    date: new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})
+  };
+
+  /* Populate hidden Formspree fields */
+  const isHAA = ops.includes('haa');
+  document.getElementById('fs-subject').value = 'New intake: ' + intakeData.company + ' — ' + intakeData.pkg;
+  ['name','company','email','phone','address','state','aircraft','fsdo','desc','notes','pkg'].forEach(k => {
+    const el = document.getElementById('fs-' + k);
+    if (el) el.value = intakeData[k];
+  });
+  document.getElementById('fs-certtype').value = intakeData.certType;
+  document.getElementById('fs-cat').value = intakeData.cat;
+  document.getElementById('fs-ops').value = intakeData.ops;
+  document.getElementById('fs-fsdocontact').value = intakeData.fsdoContact;
+  document.getElementById('fs-hazmat').value = intakeData.hazmat;
+  document.getElementById('fs-appdate').value = intakeData.appDate;
+  document.getElementById('fs-certhold').value = intakeData.certHeld;
+  document.getElementById('fs-ir').value = intakeData.ir;
+  document.getElementById('fs-pilots').value = intakeData.pilots;
+
+  /* Collect active flags */
+  const activeFlags = [];
+  document.querySelectorAll('.flag.show').forEach(f => {
+    const txt = f.textContent.trim();
+    if (txt) activeFlags.push(txt);
+  });
+  document.getElementById('fs-flags').value = activeFlags.join(' | ') || 'none';
+
+  /* Submit to Formspree via Ajax SDK */
+  const submitBtn = document.querySelector('[data-fs-submit-btn]');
+  if (submitBtn) submitBtn.click();
+
+  /* Render agreement */
+  renderAgreement();
+  document.getElementById('intake-view').style.display = 'none';
+  document.getElementById('agreement-view').style.display = 'block';
+  document.getElementById('confirm-banner').classList.add('show');
+  document.getElementById('tab-1').className = 'step-tab done';
+  document.getElementById('tab-2').className = 'step-tab done';
+  document.getElementById('tab-3').className = 'step-tab active';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  document.getElementById('agreement-view').style.display = 'none';
+  document.getElementById('intake-view').style.display = 'block';
+  document.getElementById('confirm-banner').classList.remove('show');
+  document.getElementById('tab-1').className = 'step-tab active';
+  document.getElementById('tab-2').className = 'step-tab';
+  document.getElementById('tab-3').className = 'step-tab';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Agreement renderer ── */
+function renderAgreement() {
+  const d = intakeData;
+  const isHAA = d.ops.includes('haa');
+  const isOpSpec = d.certType === 'opspec' || isHAA;
+  const isSP = d.certType === 'new-sp' && !isHAA;
+
+  const f = (v) => '<span class="filled">' + (v || '_______________') + '</span>';
+
+  let html = '';
+
+  if (isSP) {
+    /* ── Single-pilot baseline ── */
+    html = `
+      <h2>Consulting Agreement</h2>
+      <p class="agreement-sub">FAA Part 135 Documentation &amp; Certification Support</p>
+      <p class="parties">
+        This Consulting Agreement (&ldquo;Agreement&rdquo;) is entered into as of ${f(d.date)}, by and between:<br><br>
+        <strong>Consultant:</strong> Arrow Consulting LLC, located at 6942 Avalanche Circle, Anchorage, AK 99516<br><br>
+        AND<br><br>
+        <strong>Client:</strong> ${f(d.company)}<br>
+        Contact: ${f(d.name)}<br>
+        Address: ${f(d.address)}<br>
+        Email: ${f(d.email)}<br>
+        Phone: ${f(d.phone)}<br><br>
+        Collectively referred to as the &ldquo;Parties.&rdquo;
+      </p>
+
+      <p><span class="section-num">1. Purpose</span><br>
+      Client desires professional consulting services to assist with preparation of documentation required for FAA Part 135 single-pilot certification. Consultant agrees to provide such services under the terms of this Agreement.</p>
+
+      <p><span class="section-num">2. Scope of Services</span><br>
+      Consultant will provide professionally prepared templates, guidance, and consulting support for documentation customarily required for FAA Part 135 single-pilot certification, which may include:</p>
+      <ul>
+        <li>Single-Pilot Part 135 Compliance Statement</li>
+        <li>SMS Program and Policy documentation</li>
+        <li>Drug &amp; Alcohol program consultation</li>
+        <li>Company Maintenance, Training and Pilot Record Forms</li>
+        <li>Compilation of checklists and compliance procedures</li>
+        <li>Hazardous Materials &mdash; &ldquo;${f(d.hazmat === 'will-carry' ? 'WILL CARRY' : 'WILL NOT CARRY')}&rdquo; designation</li>
+        <li>FAA Application and certification guidance and reasonable revisions within allotted hours</li>
+      </ul>
+      <p class="exclusions"><strong>Exclusions:</strong> Electronic Flight Bag (EFB) programs, electronic recordkeeping systems, software implementation, legal services, FAA representation, ongoing operational management, or other services not expressly stated herein.</p>
+
+      <p><span class="section-num">3. Consulting Hours and Fees</span><br>
+      <strong>Base Package Fee: $3,900 (USD)</strong><br>
+      Included Time: Up to 5 consulting hours. Consulting time includes meetings, calls, document preparation after initial submission, customization, revisions, correspondence, and research performed on Client&rsquo;s behalf.</p>
+      <p><strong>Additional Time:</strong> Work exceeding 5 hours will be billed at $150 per hour in 0.25-hour increments. Consultant will notify Client prior to exceeding included hours. Any expanded scope or additional hours must be approved in advance by Client, either in writing or by documented verbal confirmation.</p>
+
+      <p><span class="section-num">4. Payment Terms</span><br>
+      Payment for the base package is due prior to delivery of final documents in template form unless otherwise agreed in writing. Additional hourly services will be invoiced after they are due. Consultant may suspend services for overdue invoices.</p>
+
+      <p><span class="section-num">5. Client Responsibilities</span><br>
+      Client agrees to provide complete and accurate operational information, respond promptly to Consultant requests, and review all deliverables in a timely manner. Client remains solely responsible for regulatory compliance, implementation, and all correspondence with the FAA. Client represents that the operational information provided in the intake form attached hereto as Exhibit A is accurate and complete to the best of Client&rsquo;s knowledge. Consultant&rsquo;s deliverables are tailored to the operation described therein; material inaccuracies or omissions in Exhibit A that affect document scope or applicability shall be the sole responsibility of Client.</p>
+
+      <p><span class="section-num">6. Independent Contractor</span><br>
+      Consultant is an independent contractor and is not an employee, partner, or agent of Client. Nothing in this Agreement shall be construed to create any other relationship.</p>
+
+      <p><span class="section-num">7. No Guarantee of Certification</span><br>
+      Consultant provides documentation support and consulting services only. All FAA certification decisions are made solely by the FAA. Consultant makes no representations or warranties regarding approval, timing, or outcome of the certification process.</p>
+
+      <p><span class="section-num">8. Intellectual Property</span><br>
+      Upon full payment, Client receives a non-transferable license to use the delivered documents internally. Consultant retains ownership of underlying templates and methodologies. Documents will not be resold, redistributed, or given to other Part 135 applicants without written consent.</p>
+
+      <p><span class="section-num">9. Limitation of Liability</span><br>
+      To the maximum extent permitted by law, Consultant&rsquo;s total liability arising out of or related to this Agreement shall not exceed the total fees paid by Client under this Agreement. Consultant shall not be liable for any indirect, incidental, consequential, regulatory, or operational damages.</p>
+
+      <p><span class="section-num">10. Term and Termination</span><br>
+      This Agreement remains effective until services are completed. Either Party may terminate in writing. Client is responsible for payment for services rendered through the termination date.</p>
+
+      <p><span class="section-num">11. Modifications</span><br>
+      Any changes or additional services must be agreed to in writing and signed by both Parties.</p>
+
+      <p><span class="section-num">12. Governing Law</span><br>
+      This Agreement shall be governed by the laws of the State of Alaska.</p>
+
+      <p><span class="section-num">13. Entire Agreement</span><br>
+      This document, together with the intake summary attached as Exhibit A, constitutes the entire agreement between the Parties and supersedes prior discussions or understandings.</p>
+    `;
+  } else if (isOpSpec) {
+    /* ── OpSpec A021 ── */
+    html = `
+      <h2>Consulting Agreement</h2>
+      <p class="agreement-sub">FAA Part 135 Documentation &amp; Certification Support${isHAA ? ' — OpSpec A021 (HAA / Subpart L)' : ' — OpSpec Addition / Amendment'}</p>
+      <p class="parties">
+        This Consulting Agreement (&ldquo;Agreement&rdquo;) is entered into as of ${f(d.date)}, by and between:<br><br>
+        <strong>Consultant:</strong> Arrow Consulting LLC, located at 6942 Avalanche Circle, Anchorage, AK 99516<br><br>
+        AND<br><br>
+        <strong>Client:</strong> ${f(d.company)}<br>
+        Contact: ${f(d.name)}<br>
+        Address: ${f(d.address)}<br>
+        Email: ${f(d.email)}<br>
+        Phone: ${f(d.phone)}<br><br>
+        Collectively referred to as the &ldquo;Parties.&rdquo;
+      </p>
+
+      <p><span class="section-num">1. Purpose</span><br>
+      Client desires professional consulting services to assist with preparation of documentation required for FAA Part 135 Operations Specification addition or amendment${isHAA ? ' under 14 CFR Part 135, Subpart L (Helicopter Air Ambulance Operations)' : ''}. Consultant agrees to provide such services under the terms of this Agreement.</p>
+
+      <p><span class="section-num">2. Scope of Services</span><br>
+      ${isHAA ? 'Our scope of services for the addition of OpSpec A021 (Helicopter Air Ambulance Operations) under 14 CFR Part 135, Subpart L will include full regulatory support to ensure the operator is prepared for FAA review and approval.' : 'Consultant will provide regulatory support for the requested OpSpec addition or amendment as described below.'}</p>
+      <p>Services provided will include:</p>
+      <ul>
+        <li>Review of the operator&rsquo;s current Part 135 certificate, existing OpSpecs, manuals, and organizational structure to determine applicability and readiness${isHAA ? ' for HAA authorization' : ''}.</li>
+        ${isHAA ? '<li>Preparation and submission support for OpSpec A021 application.</li>' : '<li>Preparation and submission support for requested OpSpec addition or amendment.</li>'}
+        ${isHAA ? '<li>Development and integration of a Helicopter Air Ambulance-specific Risk Analysis Worksheet into the operator&rsquo;s SMS, including hazard identification, risk assessment, mitigation strategies, and operational controls required under Subpart L.</li>' : ''}
+        <li>Revisions to the Compliance Statement to incorporate applicable requirements${isHAA ? ' of 14 CFR Part 135 Subpart L' : ''}.</li>
+        <li>Revisions and additions to the General Operations Manual (GOM)${isHAA ? ' to address HAA procedures, including pre-flight risk analysis, flight locating procedures, operational control requirements, weather minimums, altitude and obstacle clearance, and applicable crew responsibilities' : ''}.</li>
+        ${isHAA ? '<li>Revisions and additions to the Training Manual and training program to ensure compliance with Subpart L initial, recurrent, and competency requirements.</li><li>Preparation of a formal Letter of Compliance outlining how the operator meets each applicable requirement of 14 CFR Part 135 Subpart L.</li>' : ''}
+        <li>Issuance of an Engagement Letter defining scope, deliverables, assumptions, timelines, and responsibilities of both parties.</li>
+        <li>Consultant support during the review process, including responses to FAA comments, revisions requested by the Certificate Management Team, and assistance through final OpSpec issuance.</li>
+      </ul>
+      <p class="exclusions"><strong>Exclusions:</strong> Electronic Flight Bag (EFB) programs, electronic recordkeeping systems, software implementation, legal services, FAA representation, ongoing operational management, or other services not expressly stated herein.</p>
+      <p>Additional services may be required depending on the operator&rsquo;s existing certificate structure, current manuals, management personnel qualifications, or FAA Principal Inspector requirements. Any such additional scope will be identified and coordinated prior to execution.</p>
+
+      <p><span class="section-num">3. Consulting Hours and Fees</span><br>
+      <strong>Consulting Fee: $6,900 (USD)</strong><br>
+      Fee includes support, research, advice, and document revisions through the OpSpec addition. Estimated time of completion is 14 business days from payment.</p>
+      <p><strong>Additional Time and Scope:</strong> Any expanded scope or additional hours beyond the scope of the agreement must be approved in advance by Client, either in writing or by documented verbal confirmation. If approved, additional time will be billed at $150/hour.</p>
+
+      <p><span class="section-num">4. Payment Terms</span><br>
+      Payment in full is due prior to work beginning on the project. Additional hourly services will be invoiced after they are due. Consultant may suspend or delay services for overdue invoices.</p>
+
+      <p><span class="section-num">5. Client Responsibilities</span><br>
+      Client agrees to provide complete and accurate operational information, respond promptly to Consultant requests, and review all deliverables in a timely manner. Client remains solely responsible for regulatory compliance, implementation, and all correspondence with the FAA. Client represents that the operational information provided in the intake form attached hereto as Exhibit A is accurate and complete to the best of Client&rsquo;s knowledge. Material inaccuracies or omissions that affect document scope shall be the sole responsibility of Client.</p>
+
+      <p><span class="section-num">6. Independent Contractor</span><br>
+      Consultant is an independent contractor and is not an employee, partner, or agent of Client. Nothing in this Agreement shall be construed to create any other relationship.</p>
+
+      <p><span class="section-num">7. No Guarantee of Certification</span><br>
+      Consultant provides the scope of services stated in this agreement. All FAA certification decisions are made solely by the FAA. Consultant makes no representations or warranties regarding approval, timing, or outcome of the certification process.</p>
+
+      <p><span class="section-num">8. Intellectual Property</span><br>
+      Upon full payment, Client receives a non-transferable license to use the delivered documents internally. Consultant retains ownership of underlying templates and methodologies. Documents will not be resold, redistributed, or given to other Part 135 applicants without written consent.</p>
+
+      <p><span class="section-num">9. Limitation of Liability</span><br>
+      To the maximum extent permitted by law, Consultant&rsquo;s total liability arising out of or related to this Agreement shall not exceed the total fees paid by Client under this Agreement. Consultant shall not be liable for any indirect, incidental, consequential, regulatory, or operational damages.</p>
+
+      <p><span class="section-num">10. Term and Termination</span><br>
+      This Agreement remains effective until services are completed. Either Party may terminate in writing. Client is responsible for payment for services rendered through the termination date.</p>
+
+      <p><span class="section-num">11. Modifications</span><br>
+      Any changes or additional services must be agreed to in writing and signed by both Parties.</p>
+
+      <p><span class="section-num">12. Governing Law</span><br>
+      This Agreement shall be governed by the laws of the State of Alaska.</p>
+
+      <p><span class="section-num">13. Entire Agreement</span><br>
+      This document, together with the intake summary attached as Exhibit A, constitutes the entire agreement between the Parties and supersedes prior discussions or understandings.</p>
+    `;
+  } else {
+    html = `<h2>Consulting Agreement</h2><p class="agreement-sub">Full Consulting Engagement — Custom Scope</p>
+    <p class="parties"><strong>Consultant:</strong> Arrow Consulting LLC, 6942 Avalanche Circle, Anchorage, AK 99516<br><br><strong>Client:</strong> ${f(d.company)} &mdash; ${f(d.name)}<br>Address: ${f(d.address)}</p>
+    <p>Custom scope and pricing to be agreed in writing via a separate Statement of Work prior to commencement of services. All standard terms of the Arrow Consulting LLC consulting agreement apply. Contact Ryan Gourley at Arrow Consulting LLC to finalize scope.</p>`;
+  }
+
+  /* Signature block + Exhibit A — common to all */
+  html += `
+    <div class="sig-block">
+      <div class="sig-col">
+        <p><strong>Consultant</strong></p>
+        <p>Arrow Consulting LLC</p>
+        <div class="sig-line"></div>
+        <p class="sig-label">Ryan Gourley, Sole Member</p>
+        <div class="sig-line" style="margin-top:1.5rem"></div>
+        <p class="sig-label">Date</p>
+      </div>
+      <div class="sig-col">
+        <p><strong>Client</strong></p>
+        <p>${f(d.company)}</p>
+        <div class="sig-line"></div>
+        <p class="sig-label">${f(d.name)}, authorized signatory</p>
+        <div class="sig-line" style="margin-top:1.5rem"></div>
+        <p class="sig-label">Date</p>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--gray-200);margin:3rem 0 2rem">
+
+    <h2 style="font-size:14px;margin-bottom:1rem">Exhibit A &mdash; Client Intake Summary</h2>
+    <table style="width:100%;font-family:-apple-system,sans-serif;font-size:13px;border-collapse:collapse">
+      ${rows([
+        ['Date', d.date],
+        ['Client name', d.name],
+        ['Company', d.company],
+        ['Email', d.email],
+        ['Phone', d.phone],
+        ['Address', d.address],
+        ['State of incorporation', d.state || '—'],
+        ['Certification requested', d.certType],
+        ['Aircraft', d.aircraft + (d.cat ? ' (' + d.cat + ')' : '')],
+        ['Intended operations', d.ops],
+        ['FSDO', d.fsdo],
+        ['Prior FAA contact', d.fsdoContact || '—'],
+        ['HazMat', d.hazmat],
+        ['Application date', d.appDate],
+        ['Pilot certificate', d.certHeld || '—'],
+        ['Instrument rating', d.ir || '—'],
+        ['Pilot count', d.pilots || '—'],
+        ['Package', d.pkg],
+        ['Operation description', d.desc],
+        ['Additional notes', d.notes || '—'],
+      ])}
+    </table>
+    <p style="font-family:-apple-system,sans-serif;font-size:12px;color:var(--gray-400);margin-top:1.5rem;line-height:1.6">
+      Client certifies that the information provided above is accurate and complete to the best of their knowledge. Consultant&rsquo;s deliverables are designed for the operation described herein. Material changes to operational scope require written notification to Consultant prior to document submission to the FAA.
+    </p>
+  `;
+
+  document.getElementById('agreement-doc').innerHTML = html;
+}
+
+function rows(data) {
+  return data.map((r, i) => `
+    <tr style="background:${i%2===0?'#f8f8f7':'#fff'}">
+      <td style="padding:7px 10px;color:#5f5e5a;white-space:nowrap;vertical-align:top;width:38%">${r[0]}</td>
+      <td style="padding:7px 10px;color:#1a1a18;vertical-align:top">${r[1]}</td>
+    </tr>`).join('');
+}
+</script>
+</body>
+</html>
